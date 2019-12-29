@@ -10,7 +10,7 @@ contract ApprovalContract {
     function deposit(address _receiver) external payable {
         require(msg.value > 0);
         sender = msg.sender;
-        receiver - _recciever
+        receiver - _recciever;
 
     }
 
