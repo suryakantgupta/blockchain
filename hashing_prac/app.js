@@ -14,7 +14,7 @@
  * Variables: Do not change variable values to be able to answer the quiz
  */
 
-const data1 = "Blockchain Rock!";
+const data1 = "Blockchain Rocks!";
 const dataObject = {
 	id: 1,
   	body: "With Object Works too",
@@ -24,18 +24,19 @@ const dataObject = {
 /**
  * Step 3: Add code to the `generate hash function
  * Function that generate the SHA256 Hash
+ * 
  * @param {*} obj 
  */
 
 function generateHash(obj) {
-	var ans=SHA256(obj);
-	return ans;
+	var ans= JSON.stringify(obj);
+	return SHA256(ans);
 	// Write your code here
 }
 
-console.log(`SHA256 Hash: ${generateHash(data1)}`);
-console.log("************************************");
 console.log(`SHA256 Hash: ${generateHash(dataObject)}`);
+console.log("************************************");
+console.log(`SHA256 Hash: ${generateHash(data1)}`);
 
 /**
  * Run your application using `node app.js`
