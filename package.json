@@ -1,0 +1,18 @@
+{
+  "name": "hashing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "blockexplorer": "^1.0.1",
+    "chai": "^4.2.0",
+    "crypto-js": "^3.1.9-1",
+    "nock": "^12.0.3",
+    "url": "^0.11.0"
+  }
+}
