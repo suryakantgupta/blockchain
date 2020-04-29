@@ -6,86 +6,98 @@ class Blockchain{
     
     constructor(){
         this.blockdata = new levelSandBox.LevelSandbox();
-        this.generateGenesisBlock(new block.Block("Genesis Block"));
-        this.height=0;
-        this.getBlockHeight().then((result)=>{
-            this.height=result
-        })
+        this.generateGenesisBlock();
     }
 
-    generateGenesisBlock(gBlock){
-        let self = this;
+   async generateGenesisBlock(){
+        let gBlock = new block.Block("Genesis Block") ;
+        //const onResolved = (h)=>console.log(h+"try")
+        //const onRejected = (error)=>console.log(error)
+        //this.getBlockHeight().then(onResolved,onRejected)
         gBlock.time = new Date().getTime().toString().slice(0,-3);
-        gBlock.height = self.height
+        let height = await this.getBlockHeight()
+        //console.log(height)
+        gBlock.height = height+1
+       // console.log(gBlock.height)
         gBlock.hash = SHA256(JSON.stringify(gBlock)).toString();
         //console.log(gBlock.hash)
-        self.blockdata.addLevelDBData(0,JSON.stringify(gBlock))
+        this.blockdata.addLevelDBData(gBlock.height,JSON.stringify(gBlock))
     }
 
-    getBlockHeight(){
-        let self = this
-        return self.blockdata.getBlockcount()
+    async getBlockHeight(){
+        let height = await this.blockdata.getBlockcount().catch((error)=>console.log(error))
+        return height
     }
 
-    addBlock(blockTest){
-        let self = this
-    self.getBlock(self.height).then((blok)=>{
-        let obj =JSON.parse(blok)
-        blockTest.previousHash=obj.hash
-        
+   async addBlock(blockTest){
+        let height = await this.getBlockHeight()
+        //console.log(height)
+        let block =await this.getBlock(height)
+        //console.log(block)
+       let obj = JSON.parse(block)
+      blockTest.previousHash=obj.hash
         blockTest.time = new Date().getTime().toString().slice(0,-3)
-
-        self.height += 1
-        blockTest.height=self.height
+        blockTest.height = height+1
+       // blockTest.height=self.height
         blockTest.hash = SHA256(JSON.stringify(blockTest)).toString();
         //console.log(blockTest.hash)
-
-        self.blockdata.addLevelDBData(blockTest.height,JSON.stringify(blockTest))
-    
-    })
+        return this.blockdata.addLevelDBData(blockTest.height,JSON.stringify(blockTest))
     }
 
-    getBlock(height){
-        let self = this;
-        return self.blockdata.getLevelDBData(height)
+    async getBlock(height){
+        let Block = await this.blockdata.getLevelDBData(height).catch((error)=>console.log(error))
+        return Block
     }
 
 
-validateBlock(blockHeight){
-    let self = this
-    self.getBlock(blockHeight).then((blok)=>{
-        let obj = JSON.parse(blok)
-        let blockHash = obj.hash
-        //console.log(obj.hash)
-        obj.hash = '';
-        let validBlockHash = SHA256(JSON.stringify(obj)).toString();
-//console.log(validBlockHash)
-        if(blockHash==validBlockHash){
-            //console.log("truee")
-            return true;
-        }
-        else{
-            console.log('Invalid Block')
-            return false;
-        }
+async validateBlock(blockHeight){
 
-    })
+    let block = await this.getBlock(blockHeight)
+    let obj = JSON.parse(block)
+    let blockHash = obj.hash
+
+    obj.hash = "";
+    let validBlockHash = SHA256(JSON.stringify(obj)).toString();
+    if(blockHash===validBlockHash){
+        return true
+    }
+    else{
+        return false
+    }
 
 }
 
-validateChain(){
-    let self=this;
-    var isValid=false;
-    self.getBlockHeight().then((bh)=>{
-        for(let i=0;i<bh;i++){
-        //isValid=self.validateBlock(i)
-        console.log(self.validateBlock(i))
-        if(isValid){
-            console.log("Blockchain Valid")
+async validateChain(){
+    let errorLog =[]
+    let previousBlockHash = ""
+    let isValidBlock = false
+    let blockHeight = await this.getBlockHeight()
+    //console.log(blockHeight)
+    for(let i=0;i<blockHeight;i++){
+//console.log(i)
+        let block = await this.getBlock(i)
+        let obj = JSON.parse(block)
+        isValidBlock = this.validateBlock(obj.height)
+        
+        if(!isValidBlock){
+            errorLog.push(i)
         }
+        if(obj.previousHash !== previousBlockHash){
+            errorLog.push(i)
         }
-            }).catch((err) => { console.log(err);})
+        previousBlockHash = obj.hash
+
+        if(i===(blockHeight-1)){
+            if(errorLog.length > 0){
+                console.log(`Block errors = ${errorLog.length}`)
+                console.log(`Blocks: ${errorLog}`)
+            }
+            else{
+                console.log("No Errors")
+            }
         }
+    }
+}
 }
 
 module.exports.Blockchain = Blockchain;

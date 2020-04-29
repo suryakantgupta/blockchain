@@ -1,5 +1,5 @@
 const level = require('level');
-const chainDB = './chaindata' ;
+const chainDB = "./chaindata" ;
 class LevelSandbox{
     constructor(){
         this.db = level(chainDB);
@@ -25,6 +25,7 @@ class LevelSandbox{
                 if(error){
                     reject(error)
                 }
+                //console.log(`Block requested ${value}`)
                 resolve(value)
             })
         })
