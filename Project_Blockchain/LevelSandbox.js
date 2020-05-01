@@ -12,7 +12,7 @@ class LevelSandbox{
                 if(error){
                 reject(error)
                 }
-                console.log(`Added Block #${key}`)
+                //console.log(`Added Block #${key}`)
                 resolve(`Added Block #${key}`)
                 
             })

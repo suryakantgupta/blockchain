@@ -1,0 +1,6 @@
+2020/05/01-21:45:38.261 29f0 Recovering log #22
+2020/05/01-21:45:38.261 29f0 Level-0 table #24: started
+2020/05/01-21:45:38.267 29f0 Level-0 table #24: 514 bytes OK
+2020/05/01-21:45:38.280 29f0 Delete type=0 #22
+2020/05/01-21:45:38.281 29f0 Delete type=3 #20
+2020/05/01-21:45:38.297 c8c Moved #13 to level-1 325 bytes OK: files[ 3 1 0 0 0 0 0 ]

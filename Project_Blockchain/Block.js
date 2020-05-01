@@ -7,4 +7,4 @@ class Block{
         this.previousHash = "";
     }
 }
-module.exports.Block = Block;
+module.exports = Block;

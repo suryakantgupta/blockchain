@@ -1,16 +1,21 @@
 const SHA256 = require('crypto-js/sha256');
 const levelSandBox = require('./LevelSandbox.js');
-const block = require('./Block.js');
+const Block = require('./Block.js');
 
 class Blockchain{
     
     constructor(){
         this.blockdata = new levelSandBox.LevelSandbox();
-        this.generateGenesisBlock();
+        this.getBlockHeight().then((height)=>{
+            //console.log(height)
+            if(height<0){
+                this.generateGenesisBlock();
+            }
+        })
     }
 
    async generateGenesisBlock(){
-        let gBlock = new block.Block("Genesis Block") ;
+        let gBlock = new Block("Genesis Block") ;
         //const onResolved = (h)=>console.log(h+"try")
         //const onRejected = (error)=>console.log(error)
         //this.getBlockHeight().then(onResolved,onRejected)
@@ -25,8 +30,7 @@ class Blockchain{
     }
 
     async getBlockHeight(){
-        let height = await this.blockdata.getBlockcount().catch((error)=>console.log(error))
-        return height
+        return await this.blockdata.getBlockcount().catch((error)=>console.log(error))
     }
 
    async addBlock(blockTest){
@@ -45,8 +49,7 @@ class Blockchain{
     }
 
     async getBlock(height){
-        let Block = await this.blockdata.getLevelDBData(height).catch((error)=>console.log(error))
-        return Block
+        return await this.blockdata.getLevelDBData(height).catch((error)=>console.log(error))
     }
 
 
@@ -100,4 +103,4 @@ async validateChain(){
 }
 }
 
-module.exports.Blockchain = Blockchain;
+module.exports = new Blockchain();
