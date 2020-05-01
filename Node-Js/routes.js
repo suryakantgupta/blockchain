@@ -34,5 +34,4 @@ res.write('<body><h1>Hello from server</h1></body>');
 res.write('</html>')
 res.end();
 }
-
 module.exports = requestHandler;
