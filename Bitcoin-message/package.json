@@ -1,0 +1,15 @@
+{
+  "name": "bitcoin-message",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bitcoinjs-lib": "^5.1.7",
+    "bitcoinjs-message": "^2.1.0"
+  }
+}
