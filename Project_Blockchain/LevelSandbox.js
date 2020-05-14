@@ -31,6 +31,48 @@ class LevelSandbox{
         })
 
     }
+    getDataByAddress(address){
+        let self=this;
+        let blocks=[]
+        let block;
+        return new Promise((resolve,reject)=>{
+            self.db.createReadStream().on('data',(data)=>{
+                block=JSON.parse(data.value)
+                //console.log(data.value)
+                if(block.body.address === address){
+                    //console.log(data)
+                   // resolve(data.value)
+                    blocks.push(block);
+                }
+            }).on('error',error =>{
+                return reject(error);
+                
+            }).on('close' , ()=>{
+                return resolve(blocks)
+            });
+
+        })
+    }
+    getDataByhash(hash){
+        let self=this;
+        let blocks=[]
+        let block;
+        return new Promise((resolve,reject)=>{
+            self.db.createReadStream().on('data',(data)=>{
+                block=JSON.parse(data.value)
+                if(block.hash === hash){
+                    //resolve(data)
+                    blocks.push(block);
+                }
+            }).on('error',error =>{
+                return reject(error);
+                
+            }).on('close' , ()=>{
+                return resolve(blocks)
+            });
+            
+        })
+    }
 
     getBlockcount(){
         let self = this;

@@ -52,6 +52,14 @@ class Blockchain{
         return await this.blockdata.getLevelDBData(height).catch((error)=>console.log(error))
     }
 
+    async getBlockByAddress(address){
+        return await this.blockdata.getDataByAddress(address).catch((error)=>console.log(error))
+    }
+
+    async getBlockByHash(hash){
+        return await this.blockdata.getDataByhash(hash).catch((error)=>console.log(error))
+    }
+
 
 async validateBlock(blockHeight){
 
