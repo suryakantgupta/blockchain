@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 
 async function ValidateAddress(req,res,next){
     try{
+        //console.log(req.body.address)
     const Addressvalidation = new Validator(req);
     Addressvalidation.ValidateAddress();
     next();
@@ -49,12 +50,43 @@ async function ValidateAsset(req,res,next){
 }
 
 
+app.post('/requestValidation',[ValidateAddress],async (req,res)=>{
+    
+    const validation = new Validator(req)
+    const address = req.body.address
+    //try{
+     //   data = await validation.getPenAddReq(address)
+    //}catch(error){
+    data = await validation.saveNewReq(address)
+    //}
+    res.json(data);
+    await validation.getdata()
+})
+
+app.post('/validate-signature',[ValidateAddress,ValidateSignature],async (req,res)=>{
+    const validation = new Validator(req);
+    const address = req.body.address;
+    const signature = req.body.signature;
+    //try{
+       let verify=await validation.verifySignature(address,signature)
+    //}catch(error){
+    //    res.json(error.message)
+    //}
+    res.send(`Signature is ${verify}`)
+    //await validation.getdata()
+    //console.log(verify)
+})
+
+
+
+
+
 
 
 
 app.get('/block/:index',(req,res)=>{
     let i = req.params.index;
-    console.log(i)
+    //console.log(i)
     let block = Blockchain.getBlock(i)
     block.then((result)=>{
         res.send(JSON.parse(result))
@@ -89,7 +121,35 @@ app.get('/block/hash/:hash',(req,res)=>{
     })
 });
 
-app.post('/block',(req,res)=>{
+app.get('/asset',async (req,res)=>{
+    let i = req.params.index;
+    //console.log(i)
+    let asset = new Validator(req)
+    let data = await asset.getdata()
+    res.send(data)
+    /*
+    block.then((result)=>{
+        res.send(JSON.parse(result))
+    }).catch((err)=>{
+        console.log(err)
+        res.end()
+    })
+    */
+});
+
+
+
+
+
+
+
+
+
+
+app.post('/block',[ValidateAsset],async (req,res)=>{
+    const validation = new Validator(req)
+    let response = await validation.isValid()
+    if(response){
 let body = ({address , asset} = req.body);
 if(body!=null){
 let block = Blockchain.addBlock(new Block(body))
@@ -102,6 +162,7 @@ block.then((result)=>{
 }else{
     res.end()
 }
+    }
 });
 
 app.listen(3000)

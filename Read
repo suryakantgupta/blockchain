@@ -1,0 +1,14 @@
+*************************************************
+1- Request Validation:-
+
+localhost.3000/requestValidation
+
+Parameter -address
+
+
+*****************************************************
+2- Validate Signature:-
+
+localhost.3000/validate-signature
+
+Parameter- address,signature.
