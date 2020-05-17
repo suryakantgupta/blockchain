@@ -58,9 +58,9 @@ class Validator{
        value = JSON.parse(value)
        let message=value.message
        //console.log(message , address , signature)
-       let verify =true
-        //bitcoinMessage.verify(message,address,signature)
-        if(verify){
+       let verify = bitcoinMessage.verify(message,address,signature)
+       console.log(verify)
+       if(verify){
             value.messageSignature='valid'
             //assetdata.delete(address)
         }else{

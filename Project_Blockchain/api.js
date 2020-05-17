@@ -125,8 +125,13 @@ app.get('/asset',async (req,res)=>{
     let i = req.params.index;
     //console.log(i)
     let asset = new Validator(req)
-    let data = await asset.getdata()
-    res.send(data)
+    let data = asset.getdata()
+    data.then((result)=>{
+        res.send(result)
+    }).catch((err)=>{
+        console.log(err)
+        res.end()
+    })
     /*
     block.then((result)=>{
         res.send(JSON.parse(result))
@@ -160,8 +165,10 @@ block.then((result)=>{
     res.end()
 })
 }else{
-    res.end()
+    res.send("Enter Missing Parameters")
 }
+    }else{
+        res.send("Please validate signature first")
     }
 });
 
